@@ -7,7 +7,6 @@ const show = ref(true);
 const style = ref('success');
 const message = ref('');
 
-    
 watchEffect(async () => {
     style.value = page.props.jetstream.flash?.bannerStyle || 'success';
     message.value = page.props.jetstream.flash?.banner || '';
