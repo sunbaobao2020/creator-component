@@ -11,7 +11,7 @@ const props = defineProps({
     <Link
       :href="route(`backend.${ $page.props.routeNameData }.edit`, item.id)"
       v-if="$page.props.permissions.includes(`edit ${ $page.props.routeNameData }`) || $page.props.auth.user.super_admin"
-      class="float-left pr-4 py-2 text-green-400 duration-100 rounded hover:text-green-600"
+      class="inline-block pr-4 text-green-400 duration-100 rounded hover:text-green-600"
     >
       <PencilSquareIcon class="w-6 h-6" />
     </Link>

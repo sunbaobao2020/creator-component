@@ -12,7 +12,7 @@ const props = defineProps({
   <Link
     :href="route(`backend.${ $page.props.routeNameData }.show`, item.id)"
     v-if="$page.props.permissions.includes(`read ${ $page.props.routeNameData }`) || $page.props.auth.user.super_admin"
-    class="float-left pr-4 py-2 duration-100 rounded hover:text-green-600"
+    class="inline-block pr-4 duration-100 rounded hover:text-green-600"
   >
     <EyeIcon class="w-6 h-6" />
   </Link>
