@@ -24,7 +24,7 @@ const onDelete = async (id) => {
     href="#"
     @click="onDelete(item.id)"
     v-if="$page.props.permissions.includes(`delete ${ $page.props.routeNameData }`) || $page.props.auth.user.super_admin"
-    class="float-left pr-4 py-2 text-red-400 duration-100 rounded hover:text-red-600"
+    class="inline-block pr-4 text-red-400 duration-100 rounded hover:text-red-600"
   >
       <TrashIcon class="w-6 h-6" />
   </a>

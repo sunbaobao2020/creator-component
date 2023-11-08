@@ -12,6 +12,7 @@ watchEffect(async () => {
     message.value = page.props.jetstream.flash?.banner || '';
     show.value = true;
 });
+    
 </script>
 
 <template>

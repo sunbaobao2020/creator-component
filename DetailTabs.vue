@@ -25,7 +25,7 @@ const props = defineProps({
             }" class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">{{ $page.props.langs.basic_data }}</Link>
         </li>
         <li class="mr-2" v-if="table_id">
-            <Link :href="route('backend.audits.index', { 'filter[table]': table, 'filter[table_id]': table_id })" :class="{
+            <Link :href="route('backend.audits.index', { table: table, table_id: table_id })" :class="{
                 'text-blue-600': action === 'audits',
                 'border-blue-600': action === 'audits',
             }"  class="inline-block p-4 border-b-2 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">{{ $page.props.langs.audit }}</Link>
