@@ -1,8 +1,5 @@
 <script setup>
-<<<<<<< HEAD
 import { ref, nextTick } from 'vue'
-=======
->>>>>>> 33933aa227e8a7fe053d9b3adaad0b3e6d2eeddc
 import { useForm, router, usePage, Link } from '@inertiajs/vue3'
 
 import { ElInput, ElButton, ElTable, ElTableColumn, ElPagination } from 'element-plus';
