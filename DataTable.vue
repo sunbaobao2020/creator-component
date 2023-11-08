@@ -14,7 +14,8 @@ const page = usePage();
 
 const setting = {
     replace: true,
-    preserveState: true
+    preserveState: true,
+    preserveScroll: true
 };
 
 const emit = defineEmits(['search'])
@@ -54,6 +55,12 @@ const onReset = () => {
 
 </script>
 
+<style>
+.tableAuto.el-table .cell {
+  white-space: nowrap;
+}
+</style>
+
 <template>
     <div class="flex mb-2">
         <el-button class="mr-4" size="large" @click="onReset" :icon="Refresh">
@@ -68,11 +75,14 @@ const onReset = () => {
 
 
     <el-table
+        class="tableAuto"
         :data="data.data"
         :default-sort="{ prop: filters.obj.sortBy, order: filters.obj.sortOrder }"
         @sort-change="onSort"
         border
         highlight-current-row
+        show-overflow-tooltip
+        height="500"
     >
             <slot />
     </el-table>
