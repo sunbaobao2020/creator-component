@@ -1,24 +1,29 @@
 <script setup>
-import { ref, nextTick } from 'vue'
-import { useForm, router, usePage, Link } from '@inertiajs/vue3'
+import { ref } from 'vue'
+import { router, usePage } from '@inertiajs/vue3'
 
-import { ElInput, ElButton, ElTable, ElTableColumn, ElPagination } from 'element-plus';
+import { ElInput, ElButton, ElTable, ElPagination } from 'element-plus';
 import { Search, Refresh } from '@element-plus/icons-vue'
-
-import Column from 'primevue/column';
 
 const props = defineProps({
     data: { type: Object },
     filters: { type: Object },
 })
 
+const page = usePage();
+
+const setting = {
+    replace: true,
+    preserveState: true
+};
+
 const emit = defineEmits(['search'])
 
-const onPage = (value) => {
+const onPage = () => {
     onSearch();
 }
 
-const onRow = (value) => {
+const onRow = () => {
     onSearch();
 }
 
@@ -40,21 +45,20 @@ const onKeyWord = () => {
 }
 
 const onSearch = () => {
-    emit('search')
+    emit('search', setting)
 }
 
-nextTick(() => {
-    search.value.focus();
-});
+const onReset = () => {
+    router.get(route(`backend.${page.props.routeNameData}.index`), {});
+}
+
 </script>
 
 <template>
     <div class="flex mb-2">
-        <Link :href="route(`backend.${ $page.props.routeNameData }.index`)" class="mr-2">
-            <el-button size="large" :icon="Refresh">
-                {{ $page.props.langs.reset }}
-            </el-button>
-        </Link>
+        <el-button class="mr-4" size="large" @click="onReset" :icon="Refresh">
+            {{ $page.props.langs.reset }}
+        </el-button>
         <el-input ref="search" v-model="props.filters.obj.search" size="large" @input="onKeyWord" placeholder="search">
             <template #prepend>
                 <el-button :icon="Search" />
