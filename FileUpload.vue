@@ -5,24 +5,24 @@ import { ElUpload, ElButton, ElIcon, ElDialog } from 'element-plus';
 import { Plus } from '@element-plus/icons-vue'
 
 const props = defineProps({
-    modelValue: { type: [Object, Array], default: null },
+    modelValue: { type: [String, Array, Object], default: null },
     multiple: { type: Boolean, default: false },
-    limit: { type: Number, default: 1 },
 })
 
-const fileList = props.modelValue ? [] : [];
-const imageUrl = ref('')
+const upload = ref(null)
+const fileList = props.multiple ? props.modelValue?.map(item => ({ name: item.name, url: item.original_url })) : [{ url: props.modelValue }];
+const imageUrl = ref(props.multiple ? '' : props.modelValue)
 
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 
 const emit = defineEmits(['update:modelValue'])
 
-const changeData = (list) => {
+const changeData = (list, l, x) => {
     if(props.multiple){
-        emit('update:modelValue', list.map(item => item.response))
+        emit('update:modelValue', list.map(item => item.raw))
     }else{
-        emit('update:modelValue', list[0]?.response)
+        emit('update:modelValue', list?.pop().raw)
     }
 }
 
@@ -46,7 +46,8 @@ const handlePictureCardPreview = (uploadFile) => {
 
 <template>
     <el-upload
-        :file-list="fileList"
+        ref="upload"
+        v-model:file-list="fileList"
         multiple
         :show-file-list="multiple ? true : false"
         :action="route('backend.upload.store')"
