@@ -20,9 +20,9 @@ const emit = defineEmits(['update:modelValue'])
 
 const changeData = (list) => {
     if(props.multiple){
-        emit('update:modelValue', list.map(item => item.raw))
+        emit('update:modelValue', list.map(item => item.response))
     }else{
-        emit('update:modelValue', list[0]?.raw)
+        emit('update:modelValue', list[0]?.response)
     }
 }
 
