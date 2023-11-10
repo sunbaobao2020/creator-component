@@ -2,12 +2,13 @@
 import { ref } from 'vue'
 import { router, usePage } from '@inertiajs/vue3'
 
-import { ElInput, ElButton, ElTable, ElPagination } from 'element-plus';
-import { Search, Refresh } from '@element-plus/icons-vue'
+import { ElInput, ElButton, ElTable, ElPagination, ElDialog } from 'element-plus';
+import { Search, Refresh, Filter } from '@element-plus/icons-vue'
 
 const props = defineProps({
     data: { type: Object },
     filters: { type: Object },
+    advanced: { type: Boolean, default: false },
 })
 
 const page = usePage();
@@ -17,6 +18,8 @@ const setting = {
     preserveState: true,
     preserveScroll: true
 };
+
+const dialogFormVisible = ref(false)
 
 const emit = defineEmits(['search'])
 
@@ -46,11 +49,16 @@ const onKeyWord = () => {
 }
 
 const onSearch = () => {
-    emit('search', setting)
+    emit('search', setting);
 }
 
 const onReset = () => {
     router.get(route(`backend.${page.props.routeNameData}.index`), {});
+}
+
+const onAdvancedSearch = () => {
+    dialogFormVisible.value = false;
+    onSearch();
 }
 
 </script>
@@ -63,6 +71,7 @@ const onReset = () => {
 
 <template>
     <div class="flex mb-2">
+        <el-button v-if="advanced" size="large" @click="dialogFormVisible = true" :icon="Filter" plain />
         <el-button class="mr-4" size="large" @click="onReset" :icon="Refresh">
             {{ $page.props.langs.reset }}
         </el-button>
@@ -72,6 +81,28 @@ const onReset = () => {
             </template>
         </el-input>
     </div>
+
+    <template v-if="advanced">
+        <el-dialog
+            v-model="dialogFormVisible"
+            :title="$page.props.langs.advanced"
+        >
+
+            <form @submit.prevent="onAdvancedSearch" class="-mx-3">
+                <div class="flex flex-wrap w-full mb-5 relative">
+                    <slot name="advancedForm"></slot>
+                </div>
+
+            </form>
+
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">{{ $page.props.langs.cancel }}</el-button>
+                    <el-button type="primary" @click="onAdvancedSearch">{{ $page.props.langs.submit }}</el-button>
+                </span>
+            </template>
+        </el-dialog>
+    </template>
 
 
     <el-table
