@@ -114,11 +114,14 @@ const onAdvancedSearch = () => {
         highlight-current-row
         show-overflow-tooltip
         height="500"
+        row-key="id"
+        default-expand-all
     >
             <slot />
     </el-table>
 
     <el-pagination
+        v-if="data.total"
         class="mt-5"
         v-model:current-page="filters.obj.page"
         v-model:page-size="filters.obj.rows"
