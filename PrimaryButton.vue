@@ -1,5 +1,5 @@
 <script setup>
-import Button from 'primevue/button';
+import { ElButton } from 'element-plus';
 defineProps({
     type: {
         type: String,
@@ -9,7 +9,7 @@ defineProps({
 </script>
 
 <template>
-    <Button :type="type" class="mx-1 mb-4" size="small" severity="secondary">
+    <ElButton class="mx-1 mb-4" type="primary" :native-type="type">
         <slot />
-    </Button>
+    </ElButton>
 </template>

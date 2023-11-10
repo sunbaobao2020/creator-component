@@ -1,6 +1,6 @@
 <script setup>
 import { Link } from '@inertiajs/vue3'
-import Button from 'primevue/button';
+import { ElButton } from 'element-plus';
 defineProps({
     type: {
         type: String,
@@ -13,8 +13,8 @@ defineProps({
     <Link
         :href="route(`backend.${ $page.props.routeNameData }.index`)"
     >
-        <Button class="mx-1 mb-4" size="small" severity="secondary" outlined >
+        <ElButton severity="secondary" outlined >
             <slot />
-        </Button>
+        </ElButton>
     </Link>
 </template>
