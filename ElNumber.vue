@@ -16,7 +16,7 @@ const formatNumber = (value) => {
 };
 
 const parseNumber = (value) => {
-    return value.replace(/,/g, '');
+    return parseInt(value.replace(/,/g, '')) || 0;
 };
 
 const emitUpdate = (value) => {
