@@ -9,6 +9,7 @@ const props = defineProps({
     data: { type: Object },
     filters: { type: Object },
     advanced: { type: Boolean, default: false },
+    reset: { type: Function },
 })
 
 const page = usePage();
@@ -21,7 +22,7 @@ const setting = {
 
 const dialogFormVisible = ref(false)
 
-const emit = defineEmits(['search'])
+const emit = defineEmits(['search', 'reset'])
 
 const onPage = () => {
     onSearch();
@@ -53,7 +54,11 @@ const onSearch = () => {
 }
 
 const onReset = () => {
-    router.get(route(`backend.${page.props.routeNameData}.index`), {});
+    if(props.reset){
+        props.reset();
+    }else{
+        router.get(route(`backend.${page.props.routeNameData}.index`), {});
+    }
 }
 
 const onAdvancedSearch = () => {
