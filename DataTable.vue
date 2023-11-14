@@ -9,7 +9,7 @@ const props = defineProps({
     data: { type: Object },
     filters: { type: Object },
     advanced: { type: Boolean, default: false },
-    reset: { type: Function },
+    resetData: { type: Object },
 })
 
 const page = usePage();
@@ -54,11 +54,7 @@ const onSearch = () => {
 }
 
 const onReset = () => {
-    if(props.reset){
-        props.reset();
-    }else{
-        router.get(route(`backend.${page.props.routeNameData}.index`), {});
-    }
+    router.get(route(`backend.${page.props.routeNameData}.index`), props.resetData || page.props.parameterData);
 }
 
 const onAdvancedSearch = () => {
