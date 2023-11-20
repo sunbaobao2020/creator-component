@@ -22,7 +22,7 @@ const setting = {
 
 const dialogFormVisible = ref(false)
 
-const emit = defineEmits(['search', 'reset'])
+const emit = defineEmits(['search', 'reset', 'selectionChange'])
 
 const onPage = () => {
     onSearch();
@@ -62,6 +62,9 @@ const onAdvancedSearch = () => {
     onSearch();
 }
 
+const handleSelectionChange = (val) => {
+    emit('selectionChange', val);
+}
 </script>
 
 <style>
@@ -116,7 +119,8 @@ const onAdvancedSearch = () => {
         show-overflow-tooltip
         height="500"
         row-key="id"
-        default-expand-all
+        :default-expand-all="false"
+        @selection-change="handleSelectionChange"
     >
             <slot />
     </el-table>
