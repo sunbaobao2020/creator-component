@@ -18,7 +18,7 @@ const dialogVisible = ref(false)
 
 const emit = defineEmits(['update:modelValue'])
 
-const changeData = (list, l, x) => {
+const changeData = (list) => {
     if(props.multiple){
         emit('update:modelValue', list.map(item => item.raw))
     }else{
