@@ -50,6 +50,7 @@ const handlePictureCardPreview = (uploadFile) => {
         v-model:file-list="fileList"
         multiple
         :show-file-list="multiple ? true : false"
+        accept="image/png, image/jpg, image/jpeg"
         :action="route('backend.upload.store')"
         list-type="picture-card"
         :on-preview="handlePictureCardPreview"
