@@ -10,6 +10,8 @@ const props = defineProps({
     filters: { type: Object },
     advanced: { type: Boolean, default: false },
     resetData: { type: Object },
+    customReset: { type: Boolean, default: false },
+    refs: { type: Boolean, default: false },
 })
 
 const page = usePage();
@@ -21,6 +23,7 @@ const setting = {
 };
 
 const dialogFormVisible = ref(false)
+const dataTable = ref(false)
 
 const emit = defineEmits(['search', 'reset', 'selectionChange'])
 
@@ -54,7 +57,12 @@ const onSearch = () => {
 }
 
 const onReset = () => {
-    router.get(route(`backend.${page.props.routeNameData}.index`), props.resetData || page.props.parameterData);
+    dataTable.value.clearSelection()
+    if(props.customReset){
+        emit('reset');
+    } else {
+        router.get(route(`backend.${page.props.routeNameData}.index`), props.resetData || page.props.parameterData);
+    }
 }
 
 const onAdvancedSearch = () => {
@@ -64,6 +72,10 @@ const onAdvancedSearch = () => {
 
 const handleSelectionChange = (val) => {
     emit('selectionChange', val);
+}
+
+const getRowKey = (row) => {
+    return row.id;
 }
 </script>
 
@@ -110,6 +122,7 @@ const handleSelectionChange = (val) => {
 
 
     <el-table
+        ref="dataTable"
         class="tableAuto"
         :data="data.data"
         :default-sort="{ prop: filters.obj.sortBy, order: filters.obj.sortOrder }"
@@ -118,7 +131,7 @@ const handleSelectionChange = (val) => {
         highlight-current-row
         show-overflow-tooltip
         height="500"
-        row-key="id"
+        :row-key="getRowKey"
         :default-expand-all="false"
         @selection-change="handleSelectionChange"
     >
