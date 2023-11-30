@@ -43,7 +43,6 @@ const reset = () => {
 
 const selectionChange = (val) => {
   fileList.value = val;
-  console.log(fileList);
   emit('update:modelValue', val.map(item => item.id))
 }
 

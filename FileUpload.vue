@@ -10,13 +10,13 @@ const props = defineProps({
 })
 
 const upload = ref(null)
-const fileList = props.multiple ? props.modelValue?.map(item => ({ name: item.name, url: item.original_url })) : [{ url: props.modelValue }];
+const fileList = props.multiple ? props.modelValue?.map(item => ({ id: item.id, name: item.name, url: item.original_url })) : [{ url: props.modelValue }];
 const imageUrl = ref(props.multiple ? '' : props.modelValue)
 
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'updateDelete'])
 
 const changeData = (list) => {
     if(props.multiple){
@@ -35,6 +35,9 @@ const onUpload = (response, data, list) => {
 
 const onRemove = (data, list) => {
     changeData(list);
+    if(data.id){
+        emit('updateDelete', data.id)
+    }
 };
 
 const handlePictureCardPreview = (uploadFile) => {
