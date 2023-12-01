@@ -7,6 +7,7 @@ import { Plus } from '@element-plus/icons-vue'
 const props = defineProps({
     modelValue: { type: [String, Array, Object], default: null },
     multiple: { type: Boolean, default: false },
+    accept: { type: String, default: null },
 })
 
 const upload = ref(null)
@@ -53,7 +54,7 @@ const handlePictureCardPreview = (uploadFile) => {
         v-model:file-list="fileList"
         multiple
         :show-file-list="multiple ? true : false"
-        accept="image/png, image/jpg, image/jpeg"
+        :accept="accept"
         :action="route('backend.upload.store')"
         list-type="picture-card"
         :on-preview="handlePictureCardPreview"
