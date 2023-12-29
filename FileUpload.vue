@@ -27,10 +27,11 @@ const changeData = (list) => {
     }
 }
 
-const onUpload = (response, data, list) => {
+const onChange = (response, list) => {
     if(!props.multiple){
-        imageUrl.value = response;
+        imageUrl.value = response.url;
     }
+    console.log(list);
     changeData(list);
 };
 
@@ -58,8 +59,9 @@ const handlePictureCardPreview = (uploadFile) => {
         :action="route('backend.upload.store')"
         list-type="picture-card"
         :on-preview="handlePictureCardPreview"
-        :on-success="onUpload"
+        :on-change="onChange"
         :on-remove="onRemove"
+        :auto-upload="false"
     >
         <img v-if="imageUrl" :src="imageUrl" class="avatar" />
         <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
