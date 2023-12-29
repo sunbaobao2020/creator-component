@@ -31,7 +31,6 @@ const onChange = (response, list) => {
     if(!props.multiple){
         imageUrl.value = response.url;
     }
-    console.log(list);
     changeData(list);
 };
 
