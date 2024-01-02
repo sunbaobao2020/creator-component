@@ -8,6 +8,7 @@ const props = defineProps({
     modelValue: { type: [String, Array, Object], default: null },
     multiple: { type: Boolean, default: false },
     accept: { type: String, default: null },
+    autoUpload: { type: Boolean, default: false },
 })
 
 const upload = ref(null)
@@ -60,7 +61,7 @@ const handlePictureCardPreview = (uploadFile) => {
         :on-preview="handlePictureCardPreview"
         :on-change="onChange"
         :on-remove="onRemove"
-        :auto-upload="false"
+        :auto-upload="autoUpload"
     >
         <img v-if="imageUrl" :src="imageUrl" class="avatar" />
         <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
