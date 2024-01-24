@@ -37,7 +37,9 @@ const props = defineProps({
                 ]" class="inline-block p-4 border-b-2 rounded-t-lg active hover:text-blue-600 hover:border-blue-600 dark:hover:text-gray-200 dark:hover:border-gray-200">{{ $page.props.langs.basic_data }}</Link>
             </li>
             <li class="mr-2" v-if="table_id">
-                <Link :href="route('backend.audits.index', { table: table, table_id: table_id })" :class="[
+                <Link
+                    v-if="$page.props.permissions.includes('read audits') || $page.props.auth.user.super_admin"
+                    :href="route('backend.audits.index', { table: table, table_id: table_id })" :class="[
                     action === 'audits' ? 'text-blue-600 dark:text-gray-200 border-blue-600 dark:border-gray-200': 'dark:text-gray-500 dark:border-gray-500'
                 ]"  class="inline-block p-4 border-b-2 rounded-t-lg active hover:text-blue-600 hover:border-blue-600 dark:hover:text-gray-200 dark:hover:border-gray-200" aria-current="page">{{ $page.props.langs.audit }}</Link>
             </li>
