@@ -7,8 +7,6 @@ const props = defineProps({
   permissions: { type: Boolean, default: true },
 })
 
-console.log(props)
-
 </script>
 
 <template>
