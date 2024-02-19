@@ -10,12 +10,13 @@ defineProps({
         type: String,
         default: 'default',
     },
+    prefix: { type: String, default: 'backend' },
 });
 </script>
 
 <template>
     <Link
-        :href="route(`backend.${ $page.props.routeNameData }.index`)"
+        :href="route(`${ prefix }.${ $page.props.routeNameData }.index`)"
     >
         <ElButton severity="secondary" outlined :size="size">
             <slot />

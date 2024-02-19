@@ -9,13 +9,14 @@ import { confirmDelete } from '@/Services/confirmDelete';
 const props = defineProps({
   item: { type: Object },
   permissions: { type: Boolean, default: true },
+  prefix: { type: String, default: 'backend' },
 })
 
 const page = usePage();
 
 const onDelete = async (id) => {
     if(await confirmDelete(page.props.langs)){
-        router.delete(route(`backend.${page.props.routeNameData}.destroy`, id), SuccessAlert)
+        router.delete(route(`${ prefix }.${page.props.routeNameData}.destroy`, id), SuccessAlert)
     }
 }
 </script>
