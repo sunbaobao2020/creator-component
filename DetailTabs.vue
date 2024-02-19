@@ -1,5 +1,6 @@
 <script setup>
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
+
 const props = defineProps({
     action: {
         type: String,
@@ -16,8 +17,11 @@ const props = defineProps({
         type: Array,
         default: [],
     },
-    prefix: { type: String, default: 'backend' },
 });
+
+const page = usePage();
+const prefix = page.props.prefix || 'backend';
+
 </script>
 
 <template>
