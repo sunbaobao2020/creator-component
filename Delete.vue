@@ -16,7 +16,7 @@ const page = usePage();
 
 const onDelete = async (id) => {
     if(await confirmDelete(page.props.langs)){
-        router.delete(route(`${ prefix }.${page.props.routeNameData}.destroy`, id), SuccessAlert)
+        router.delete(route(`${ props.prefix }.${page.props.routeNameData}.destroy`, id), SuccessAlert)
     }
 }
 </script>
