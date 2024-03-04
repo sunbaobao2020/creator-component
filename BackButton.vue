@@ -1,5 +1,5 @@
 <script setup>
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
 import { ElButton } from 'element-plus';
 defineProps({
     type: {
@@ -11,11 +11,15 @@ defineProps({
         default: 'default',
     },
 });
+
+const page = usePage();
+const prefix = page.props.prefix || 'backend';
+
 </script>
 
 <template>
     <Link
-        :href="route(`backend.${ $page.props.routeNameData }.index`)"
+        :href="route(`${ prefix }.${ $page.props.routeNameData }.index`)"
     >
         <ElButton severity="secondary" outlined :size="size">
             <slot />
