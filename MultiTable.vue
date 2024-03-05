@@ -29,14 +29,14 @@ const remove = (index) => {
 }
 
 const moveUp = (index) => {
-  if (props.data && index>0) {
-    let rows = [props.data[index], props.data[index-1]];
-    props.data?.splice(index-1, 2, rows[0], rows[1]);
+  if (props.data && index > 0) {
+    let rows = [props.data[index], props.data[index - 1]];
+    props.data?.splice(index - 1, 2, rows[0], rows[1]);
   }
 }
 
 const moveDown = (index) => {
-  if (props.data && index < (props.data.length-1)) {
+  if (props.data && index < (props.data.length - 1)) {
     let rows = [props.data[index], props.data[index+1]];
     props.data?.splice(index, 2, rows[1], rows[0]);
   }
@@ -46,8 +46,8 @@ const moveDown = (index) => {
 
 <template>
   <div class="relative text-left">
-    <table class="min-w-full divide-y divide-gray-200 bg-white mb-4">
-      <thead class="bg-gray-100">
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 mb-4">
+      <thead class="">
         <tr>
           <th v-for="(column, index) in props.columns" :key="column.key"
             :aria-colindex="index + 1"
@@ -67,7 +67,7 @@ const moveDown = (index) => {
           </th>
         </tr>
       </thead>
-      <tbody class="bg-white divide-y divide-gray-200 align-top">
+      <tbody class=" divide-y divide-gray-200 dark:divide-gray-700 align-top">
         <tr
           v-for="(item, index) in props.data"
           :key="index"
