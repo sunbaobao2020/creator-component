@@ -12,6 +12,7 @@ const props = defineProps({
     resetData: { type: Object },
     customReset: { type: Boolean, default: false },
     refs: { type: Boolean, default: false },
+    selectedHighlight: { type: Boolean, default: false },
 })
 
 const page = usePage();
@@ -42,6 +43,7 @@ const onSort = (value) => {
 }
 
 const search = ref(null);
+const ids = ref([]);
 
 const debounceTimeouts = {};
 const onKeyWord = () => {
@@ -71,7 +73,14 @@ const onAdvancedSearch = () => {
 }
 
 const handleSelectionChange = (val) => {
+    ids.value = val;
     emit('selectionChange', val);
+}
+
+const selectedHighlight = ({ row, rowIndex }) => {
+    if (props.selectedHighlight && ids.value.find(item => item.id == row.id)) {
+        return 'background-color: #ecf5ff';
+    }
 }
 
 const getRowKey = (row) => {
@@ -132,6 +141,7 @@ const getRowKey = (row) => {
         show-overflow-tooltip
         height="500"
         :row-key="getRowKey"
+        :row-style="selectedHighlight"
         :default-expand-all="false"
         @selection-change="handleSelectionChange"
     >
