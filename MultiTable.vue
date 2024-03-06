@@ -54,8 +54,9 @@ const moveDown = (index) => {
             class="relative text-sm px-1.5 md:px-3 py-2.5 whitespace-nowrap"
             >
             <slot :name="'header_cell('+column.key+')'" :index="index">
-              <div>{{ column.label }}</div>
+              {{ column.label }}
             </slot>
+            <span v-if="column.required" class="text-red-500">*</span>
           </th>
           <th class="w-14 text-center px-0">
           </th>
