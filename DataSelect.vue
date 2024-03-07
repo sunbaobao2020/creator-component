@@ -9,6 +9,8 @@ const props = defineProps({
     routeNameData: { type: String, default: 'select' },
     multiple: { type: Boolean, default: false },
     route_name: { type: String },
+    option_value: { type: String, default: 'id'},
+    option_label: { type: String, default: 'name'},
 })
 
 const page = usePage();
@@ -49,9 +51,9 @@ watch(() => props.modelValue, (newValue) => {
     <slot name="option" :data="ajaxData">
       <ElOption
           v-for="item in ajaxData"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id"
+          :key="item[option_value]"
+          :label="item[option_label]"
+          :value="item[option_value]"
       />
     </slot>
   </ElSelect>
