@@ -1,2 +1,1 @@
-# vue-component1
-
+# vue-compone
