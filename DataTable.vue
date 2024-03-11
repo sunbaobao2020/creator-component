@@ -16,9 +16,10 @@ const props = defineProps({
 })
 
 const page = usePage();
+const table_key = `${ page.props.routeNameData }_query`;
 
 const setData = () => {
-    localStorage.setItem(`${ page.props.routeNameData }_query`, JSON.stringify(props.filters.obj));
+    localStorage.setItem(table_key, JSON.stringify(props.filters.obj));
 }
 
 setData();
@@ -66,6 +67,7 @@ const onSearch = () => {
 }
 
 const onReset = () => {
+    localStorage.removeItem(table_key);
     dataTable.value.clearSelection()
     if(props.customReset){
         emit('reset');
@@ -93,6 +95,10 @@ const selectedHighlight = ({ row, rowIndex }) => {
 const getRowKey = (row) => {
     return row.id;
 }
+
+defineExpose({
+  onSearch,
+});
 </script>
 
 <style>
