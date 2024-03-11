@@ -11,6 +11,7 @@ const props = defineProps({
     route_name: { type: String },
     option_value: { type: String, default: 'id'},
     option_label: { type: String, default: 'name'},
+    customData: { type: Array },
 })
 
 const page = usePage();
@@ -23,9 +24,13 @@ const emit = defineEmits(['update:modelValue', 'callback'])
 const ajaxData = ref([]);
 
 const loadAjaxData = (query) => {
-    axios.get(route(`${ prefix }.${ props.route_name }.options`, { search: query }), ).then(({ data }) => {
-        ajaxData.value = data;
-    })
+    if(props.customData){
+        ajaxData.value = props.customData;
+    }else{
+        axios.get(route(`${ prefix }.${ props.route_name }.options`, { search: query }), ).then(({ data }) => {
+            ajaxData.value = data;
+        })
+    }
 }
 
 loadAjaxData(null);
