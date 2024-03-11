@@ -17,6 +17,12 @@ const props = defineProps({
 
 const page = usePage();
 
+const setData = () => {
+    localStorage.setItem(`${ page.props.routeNameData }_query`, JSON.stringify(props.filters.obj));
+}
+
+setData();
+
 const setting = {
     replace: true,
     preserveState: true,
@@ -55,6 +61,7 @@ const onKeyWord = () => {
 }
 
 const onSearch = () => {
+    setData();
     emit('search', setting);
 }
 
