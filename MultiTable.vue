@@ -23,7 +23,6 @@ const add = () => {
 
 const remove = (index) => {
   if (props.data) {
-      console.log(props.data);
       props.data.splice(index, 1);
   }
 }
