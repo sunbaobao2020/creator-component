@@ -17,7 +17,7 @@ const props = defineProps({
 const page = usePage();
 const prefix = page.props.prefix || 'backend';
 
-const value = ref(props.modelValue);
+const dataValue = ref(props.modelValue);
 
 const emit = defineEmits(['update:modelValue', 'callback'])
 
@@ -41,19 +41,19 @@ const changeData = (value) => {
 }
 
 watch(() => props.modelValue, (newValue) => {
-    value.value = newValue;
+    dataValue.value = newValue;
 })
 
 </script>
 <template>
   <ElSelect
-      v-model="value"
+      v-model="dataValue"
       class="w-full"
       @change="value => changeData(value)"
       clearable
       :multiple="multiple"
   >
-    <slot name="option" :data="ajaxData">
+    <slot name="option" v-bind="props" :data="ajaxData" >
       <ElOption
           v-for="item in ajaxData"
           :key="item[option_value]"
