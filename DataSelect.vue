@@ -5,7 +5,7 @@ import { ElSelect, ElOption } from 'element-plus';
 import axios from 'axios';
 
 const props = defineProps({
-    modelValue: { type: [Number, Array] },
+    modelValue: { type: [Number, Array, String] },
     routeNameData: { type: String, default: 'select' },
     multiple: { type: Boolean, default: false },
     route_name: { type: String },

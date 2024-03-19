@@ -9,11 +9,14 @@ const props = defineProps({
     multiple: { type: Boolean, default: false },
     accept: { type: String, default: null },
     autoUpload: { type: Boolean, default: false },
+    listType: { type: String, default: 'picture-card' }, //'text' | 'picture' | 'picture-card'
 })
 
 const upload = ref(null)
-const fileList = props.multiple ? props.modelValue?.map(item => ({ id: item.id, name: item.name, url: item.original_url })) : [{ url: props.modelValue }];
-const imageUrl = ref(props.multiple ? '' : props.modelValue)
+
+const fileList = props.multiple ? props.modelValue?.map(item => ({ id: item.id, name: item.name, url: item.original_url })) : [{ url: props.modelValue, name: props.modelValue }];
+
+const fileData = ref(props.multiple ? null : { url: props.modelValue, name: props.modelValue })
 
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
@@ -30,7 +33,8 @@ const changeData = (list) => {
 
 const onChange = (response, list) => {
     if(!props.multiple){
-        imageUrl.value = response.url;
+        fileData.value.url = response.url;
+        fileData.value.name = response.name;
     }
     changeData(list);
 };
@@ -63,8 +67,15 @@ const handlePictureCardPreview = (uploadFile) => {
         :on-remove="onRemove"
         :auto-upload="autoUpload"
     >
-        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-        <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+        <template v-if="listType == 'picture-card'">
+            <img v-if="fileData.url" :src="fileData.url" class="avatar" />
+            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+        </template>
+
+        <template v-if="listType == 'text'">
+            <div v-if="fileData.name" class="avatar"><div>{{ fileData.name }}</div></div>
+            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+        </template>
     </el-upload>
 
     <el-dialog v-model="dialogVisible">
