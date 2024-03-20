@@ -44,7 +44,13 @@ const moveDown = (index) => {
 </script>
 
 <template>
-  <div class="relative text-left">
+  <div class="text-right">
+    <PlusIcon
+      class="inline-block h-4 -mt-1 text-danger-500 cursor-pointer hover:bg-gray-200 hover:rounded-full"
+      @click="add"
+    />
+  </div>
+  <div class="relative text-left overflow-auto">
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 mb-4">
       <thead class="">
         <tr>
@@ -60,10 +66,6 @@ const moveDown = (index) => {
           <th class="w-14 text-center px-0">
           </th>
           <th class="w-9 lg:w-1 text-center px-2" >
-            <PlusIcon
-              class="inline-block h-4 -mt-1 text-danger-500 cursor-pointer hover:bg-gray-200 hover:rounded-full"
-              @click="add"
-            />
           </th>
         </tr>
       </thead>
@@ -77,11 +79,11 @@ const moveDown = (index) => {
             >
             <slot :name="'cell('+column.key+')'" :item="item" :index="index">
               <div v-if="column.type==='input'">
-                <ElInput v-model="item[column.key]" :placeholder="column.label" class="w-full" />
+                <ElInput v-model="item[column.key]" :placeholder="column.label" class="w-full" :disabled="column.disabled || false" />
               </div>
 
               <div v-if="column.type==='number'">
-                <ElInput v-model="item[column.key]" :placeholder="column.label" class="w-full" :formatter="formatNumber" :parser="parseNumber" />
+                <ElInput v-model="item[column.key]" :placeholder="column.label" class="w-full" :disabled="column.disabled || false" :formatter="formatNumber" :parser="parseNumber" />
               </div>
             </slot>
             <p class="text-red-500 text-xs italic" v-if="$page.props.errors[`${ data_key }.${ index }.${ column.key }`]">
@@ -89,7 +91,7 @@ const moveDown = (index) => {
             </p>
           </td>
           <td
-            class="min-w-max text-center"
+            class="min-w-[50PX] text-center"
           >
             <ArrowUpCircleIcon
               class="inline-block h-[1.2rem] mt-1.5 text-gray-500 cursor-pointer hover:text-primary-600"
