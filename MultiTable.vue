@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue'
+import { ref, reactive } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import { ArrowUpCircleIcon, ArrowDownCircleIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { PlusIcon } from '@heroicons/vue/24/solid'
@@ -17,9 +17,11 @@ const props = defineProps({
 
 const state = reactive({
   page: 1,
-  limit: 15,
+  rows: 5,
   total: props.data.length
 })
+
+const multiTable = ref(null);
 
 const page = usePage();
 
@@ -28,12 +30,13 @@ const emit = defineEmits(['add'])
 
 const tableData = () => {
   return props.data.filter((item, index) => {
-    return index >= (state.page - 1) * state.limit && index < state.page * state.limit
+    return index >= (state.page - 1) * state.rows && index < state.page * state.rows
   })
 }
 
 const add = () => {
   state.page = 1;
+  multiTable.value.scrollTo(0);
   emit('add');
 }
 
@@ -92,7 +95,7 @@ const handleSelectionChange = (val) => {
     :default-expand-all="false"
     @selection-change="handleSelectionChange"
   >
-    <el-table-column  label="#" prop="id">
+    <el-table-column  label="#" prop="id" width="35">
         <template #default="scope">
             <span>{{ scope.$index + 1 }}</span>
         </template>
@@ -151,7 +154,10 @@ const handleSelectionChange = (val) => {
   <el-pagination
       class="mt-5"
       v-model:current-page="state.page"
-      layout="prev, pager, next"
+      v-model:page-size="state.rows"
+      :default-page-size="state.rows"
+      :page-sizes="[5, 10, 15]"
+      layout="sizes, prev, pager, next"
       :total="data.length"
   />
 </template>
