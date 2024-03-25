@@ -5,20 +5,15 @@ import { ArrowUpCircleIcon, ArrowDownCircleIcon, TrashIcon } from '@heroicons/vu
 import { PlusIcon } from '@heroicons/vue/24/solid'
 import { ElInput, ElTable, ElTableColumn, ElPagination } from 'element-plus';
 import { formatNumber, parseNumber } from '@/Services/NumberFormat'
+import sortArray from 'sort-array'
 
 const props = defineProps({
   data_key: { type: String },
-  filters: { type: Object, default: { obj: {} }},
   columns: { type: Array },
   data: { type: Array, default: [] },
   add_data: { type: Boolean, default: true },
   max_height: { type: Number, default: 500 },
 })
-
-const page = usePage();
-
-//emit
-const emit = defineEmits(['add'])
 
 const state = reactive({
   page: 1,
@@ -26,14 +21,19 @@ const state = reactive({
   total: props.data.length
 })
 
+const page = usePage();
+
+//emit
+const emit = defineEmits(['add'])
+
 const tableData = () => {
   return props.data.filter((item, index) => {
     return index >= (state.page - 1) * state.limit && index < state.page * state.limit
   })
 }
 
-
 const add = () => {
+  state.page = 1;
   emit('add');
 }
 
@@ -57,14 +57,15 @@ const moveDown = (index) => {
   }
 }
 
-const onSearch = () => {
-    emit('search', setting);
-}
 
 const onSort = (value) => {
-    props.filters.obj.sortBy = value.prop;
-    props.filters.obj.sortOrder = value.order;
-    onSearch();
+  state.sortBy = value.prop;
+  state.sortOrder = value.order;
+
+  sortArray(props.data, {
+    by: value.prop,
+    order: value.order === 'ascending' ? 'asc' : 'desc'
+  })
 }
 
 const getRowKey = (row) => {
@@ -75,27 +76,13 @@ const handleSelectionChange = (val) => {
     ids.value = val;
     emit('selectionChange', val);
 }
-
-const handleCurrentChange = (e) => {
-  state.page = e
-}
-
 </script>
-
-<style>
-.MultiTable .cell{
-  padding: 0px;
-  text-align: center;
-  white-space: nowrap;
-}
-</style>
 
 <template>
   <el-table
-    ref="dataTable"
+    ref="multiTable"
     class="MultiTable"
     :data="tableData()"
-    :default-sort="{ prop: filters.obj.sortBy, order: filters.obj.sortOrder }"
     @sort-change="onSort"
     border
     highlight-current-row
@@ -114,9 +101,9 @@ const handleCurrentChange = (e) => {
       v-for="(column, index) in props.columns"
       :key="column.key"
       :label="column.label"
-      :sortable="column.sortable || false"
+      :sortable="column.sortable || 'custom'"
       :prop="column.key"
-      :width="column.with"
+      :width="column.width"
     >
       <template #default="{ row }">
         <slot :name="'cell('+column.key+')'" :item="row" :index="index">
@@ -163,12 +150,8 @@ const handleCurrentChange = (e) => {
 
   <el-pagination
       class="mt-5"
-      v-model:current-page="filters.obj.page"
-      v-model:page-size="filters.obj.rows"
-      :default-page-size="15"
-      :page-sizes="[15, 30, 50, 100]"
+      v-model:current-page="state.page"
       layout="prev, pager, next"
       :total="data.length"
-      @current-change="handleCurrentChange"
   />
 </template>
