@@ -115,7 +115,7 @@ const handleSelectionChange = (val) => {
         </span>
       </template>
       <template #default="{ row }">
-        <slot :name="'cell('+column.key+')'" :item="row" :index="index">
+        <slot :name="'cell('+column.key+')'" :item="row" :index="index" :column="column">
           <div v-if="column.type==='input'">
             <ElInput v-model="row[column.key]" :placeholder="column.label" class="w-full" :disabled="column.disabled || false" />
           </div>
