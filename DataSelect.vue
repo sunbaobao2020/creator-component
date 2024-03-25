@@ -41,6 +41,16 @@ const changeData = (value) => {
     emit('callback', ajaxData.value);
 }
 
+const labelFormat = (item) => {
+    let tmp = item[props.option_label];
+
+    if(props.option_label == 'name (no)'){
+        tmp = `${ item['name'] } (${ item['no'] })`;
+    }
+
+    return tmp;
+}
+
 watch(() => props.modelValue, (newValue) => {
     dataValue.value = newValue;
 })
@@ -62,7 +72,7 @@ watch(() => props.customData, (newValue) => {
       <ElOption
           v-for="item in ajaxData"
           :key="item[option_value]"
-          :label="item[option_label]"
+          :label="labelFormat(item)"
           :value="item[option_value]"
       />
     </slot>

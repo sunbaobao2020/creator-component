@@ -108,6 +108,12 @@ const handleSelectionChange = (val) => {
       :prop="column.key"
       :width="column.width"
     >
+      <template #header>
+        <span>
+          {{ column.label }}
+          <span v-if="column.required" class="text-red-500">*</span>
+        </span>
+      </template>
       <template #default="{ row }">
         <slot :name="'cell('+column.key+')'" :item="row" :index="index">
           <div v-if="column.type==='input'">
