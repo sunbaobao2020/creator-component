@@ -2,11 +2,12 @@
 import { usePage } from '@inertiajs/vue3'
 import { ArrowUpCircleIcon, ArrowDownCircleIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { PlusIcon } from '@heroicons/vue/24/solid'
-import { ElInput } from 'element-plus';
+import { ElInput, ElTable, ElTableColumn } from 'element-plus';
 import { formatNumber, parseNumber } from '@/Services/NumberFormat'
 
 const props = defineProps({
   data_key: { type: String },
+  filters: { type: Object, default: { obj: {} }},
   columns: { type: Array },
   data: { type: Array, default: [] },
 })
@@ -41,90 +42,107 @@ const moveDown = (index) => {
   }
 }
 
+const onSearch = () => {
+    emit('search', setting);
+}
+
+const onSort = (value) => {
+    props.filters.obj.sortBy = value.prop;
+    props.filters.obj.sortOrder = value.order;
+    onSearch();
+}
+
+const getRowKey = (row) => {
+    return row.id;
+}
+
+const handleSelectionChange = (val) => {
+    ids.value = val;
+    emit('selectionChange', val);
+}
+
+
 </script>
 
+<style>
+.MultiTable .cell{
+  padding: 0px;
+  text-align: center;
+  white-space: nowrap;
+}
+</style>
+
 <template>
-  <div class="text-right">
-    <PlusIcon
-      class="inline-block h-4 -mt-1 text-danger-500 cursor-pointer hover:bg-gray-200 hover:rounded-full"
-      @click="add"
-    />
-  </div>
-  <div class="relative text-left overflow-auto">
-    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 mb-4">
-      <thead class="">
-        <tr>
-          <th v-for="(column, index) in props.columns" :key="column.key"
-            :aria-colindex="index + 1"
-            class="relative text-sm px-1.5 md:px-3 py-2.5 whitespace-nowrap"
-            >
-            <slot :name="'header_cell('+column.key+')'" :index="index">
-              {{ column.label }}
-            </slot>
-            <span v-if="column.required" class="text-red-500">*</span>
-          </th>
-          <th class="w-14 text-center px-0">
-          </th>
-          <th class="w-9 lg:w-1 text-center px-2" >
-          </th>
-        </tr>
-      </thead>
-      <tbody class=" divide-y divide-gray-200 dark:divide-gray-700 align-top">
-        <tr
-          v-for="(item, index) in props.data"
-          :key="index"
-        >
-          <td v-for="column in columns"
-            :key="column.key"
-            >
-            <slot :name="'cell('+column.key+')'" :item="item" :index="index">
-              <div v-if="column.type==='input'">
-                <ElInput v-model="item[column.key]" :placeholder="column.label" class="w-full" :disabled="column.disabled || false" />
-              </div>
+  <el-table
+    ref="dataTable"
+    class="MultiTable"
+    :data="props.data"
+    :default-sort="{ prop: filters.obj.sortBy, order: filters.obj.sortOrder }"
+    @sort-change="onSort"
+    border
+    highlight-current-row
+    show-overflow-tooltip
+    height="500"
+    :row-key="getRowKey"
+    :default-expand-all="false"
+    @selection-change="handleSelectionChange"
+  >
 
-              <div v-if="column.type==='number'">
-                <ElInput v-model="item[column.key]" :placeholder="column.label" class="w-full" :disabled="column.disabled || false" :formatter="formatNumber" :parser="parseNumber" />
-              </div>
-            </slot>
-            <p class="text-red-500 text-xs italic" v-if="$page.props.errors[`${ data_key }.${ index }.${ column.key }`]">
-              {{ $page.props.errors[`${ data_key }.${ index }.${ column.key }`] }}
-            </p>
-          </td>
-          <td
-            class="min-w-[50PX] text-center"
-          >
-            <ArrowUpCircleIcon
-              class="inline-block h-[1.2rem] mt-1.5 text-gray-500 cursor-pointer hover:text-primary-600"
-              @click="moveUp(index)"
-            />
-            <ArrowDownCircleIcon
-              class="inline-block h-[1.2rem] mt-1.5 text-gray-500 cursor-pointer hover:text-primary-600"
-              @click="moveDown(index)"
-            />
-          </td>
-          <td
-            class="min-w-max text-center"
-          >
-            <TrashIcon
-              class="inline-block h-[1.1rem] mt-1.5 text-gray-500 cursor-pointer hover:text-danger-600"
-              @click="remove(index)"
-            />
-          </td>
-        </tr>
+    <el-table-column  label="#" sortable width="50" prop="id">
+      <template #default="scope">
+          <span>{{ scope.$index + 1 }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      v-for="(column, index) in props.columns"
+      :key="column.key"
+      :label="column.label"
+      sortable
+      :prop="column.key"
+      :width="column.with"
+    >
+      <template #default="{ row }">
+        <slot :name="'cell('+column.key+')'" :item="row" :index="index">
+          <div v-if="column.type==='input'">
+            <ElInput v-model="row[column.key]" :placeholder="column.label" class="w-full" :disabled="column.disabled || false" />
+          </div>
 
-        <!-- placeholder if no rows -->
-        <tr v-if="(!props.data || props.data.length==0)">
-          <td :colspan="props.columns ? props.columns.length : 1">
-            <div class="text-center py-10 italic text-gray-400">
-              <span class="cursor-pointer" @click="add">{{ $page.props.langs.add_row }}</span>
-            </div>
-          </td>
-        </tr>
-
-      </tbody>
-      <tfoot>
-        <slot name="tfoot"></slot>
-      </tfoot>
-    </table>
-  </div>
+          <div v-if="column.type==='number'">
+            <ElInput v-model="row[column.key]" :placeholder="column.label" class="w-full" :disabled="column.disabled || false" :formatter="formatNumber" :parser="parseNumber" />
+          </div>
+        </slot>
+        <p class="text-red-500 text-xs italic" v-if="$page.props.errors[`${ data_key }.${ index }.${ column.key }`]">
+          {{ $page.props.errors[`${ data_key }.${ index }.${ column.key }`] }}
+        </p>
+      </template>
+    </el-table-column>
+    <el-table-column fixed="right" width="70">
+        <template #default="scope">
+          <ArrowUpCircleIcon
+            class="inline-block h-[1.2rem] mt-1.5 text-gray-500 cursor-pointer hover:text-primary-600"
+            @click="moveUp(scope.$index)"
+          />
+          <ArrowDownCircleIcon
+            class="inline-block h-[1.2rem] mt-1.5 text-gray-500 cursor-pointer hover:text-primary-600"
+            @click="moveDown(scope.$index)"
+          />
+        </template>
+    </el-table-column>
+    <el-table-column fixed="right" width="40">
+        <template #header>
+          <div class="text-right">
+            <PlusIcon
+              class="inline-block h-4 -mt-1 text-danger-500 cursor-pointer hover:bg-gray-200 hover:rounded-full"
+              @click="add"
+            />
+          </div>
+        </template>
+        <template #default="scope">
+          <TrashIcon
+            class="inline-block h-[1.1rem] mt-1.5 text-gray-500 cursor-pointer hover:text-danger-600"
+            @click="remove(scope.$index)"
+          />
+        </template>
+    </el-table-column>
+  </el-table>
 </template>
