@@ -12,6 +12,7 @@ const props = defineProps({
     option_value: { type: String, default: 'id'},
     option_label: { type: String, default: 'name'},
     customData: { type: Array },
+    route_parameter: { type: Object, default: () => ({  })},
 })
 
 const page = usePage();
@@ -27,7 +28,7 @@ const loadAjaxData = (query) => {
     if(props.customData){
         ajaxData.value = props.customData;
     }else{
-        axios.get(route(`${ prefix }.${ props.route_name }.options`, { search: query }), ).then(({ data }) => {
+        axios.get(route(`${ prefix }.${ props.route_name }.options`, { search: query, ...props.route_parameter }), ).then(({ data }) => {
             ajaxData.value = data;
         })
     }
