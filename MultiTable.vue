@@ -1,8 +1,9 @@
 <script setup>
+import { reactive } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import { ArrowUpCircleIcon, ArrowDownCircleIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { PlusIcon } from '@heroicons/vue/24/solid'
-import { ElInput, ElTable, ElTableColumn } from 'element-plus';
+import { ElInput, ElTable, ElTableColumn, ElPagination } from 'element-plus';
 import { formatNumber, parseNumber } from '@/Services/NumberFormat'
 
 const props = defineProps({
@@ -10,12 +11,26 @@ const props = defineProps({
   filters: { type: Object, default: { obj: {} }},
   columns: { type: Array },
   data: { type: Array, default: [] },
+  add_data: { type: Boolean, default: true },
+  max_height: { type: Number, default: 500 },
 })
 
 const page = usePage();
 
 //emit
 const emit = defineEmits(['add'])
+
+const state = reactive({
+  page: 1,
+  limit: 15,
+  total: props.data.length
+})
+
+const tableData = () => {
+  return props.data.filter((item, index) => {
+    return index >= (state.page - 1) * state.limit && index < state.page * state.limit
+  })
+}
 
 
 const add = () => {
@@ -61,6 +76,9 @@ const handleSelectionChange = (val) => {
     emit('selectionChange', val);
 }
 
+const handleCurrentChange = (e) => {
+  state.page = e
+}
 
 </script>
 
@@ -76,28 +94,27 @@ const handleSelectionChange = (val) => {
   <el-table
     ref="dataTable"
     class="MultiTable"
-    :data="props.data"
+    :data="tableData()"
     :default-sort="{ prop: filters.obj.sortBy, order: filters.obj.sortOrder }"
     @sort-change="onSort"
     border
     highlight-current-row
     show-overflow-tooltip
-    height="500"
+    :max-height="max_height"
     :row-key="getRowKey"
     :default-expand-all="false"
     @selection-change="handleSelectionChange"
   >
-
-    <el-table-column  label="#" sortable width="50" prop="id">
-      <template #default="scope">
-          <span>{{ scope.$index + 1 }}</span>
-      </template>
+    <el-table-column  label="#" prop="id">
+        <template #default="scope">
+            <span>{{ scope.$index + 1 }}</span>
+        </template>
     </el-table-column>
     <el-table-column
       v-for="(column, index) in props.columns"
       :key="column.key"
       :label="column.label"
-      sortable
+      :sortable="column.sortable || false"
       :prop="column.key"
       :width="column.with"
     >
@@ -116,33 +133,42 @@ const handleSelectionChange = (val) => {
         </p>
       </template>
     </el-table-column>
-    <el-table-column fixed="right" width="70">
+    <el-table-column fixed="right">
         <template #default="scope">
           <ArrowUpCircleIcon
-            class="inline-block h-[1.2rem] mt-1.5 text-gray-500 cursor-pointer hover:text-primary-600"
+            class="inline-block h-[1.2rem] text-gray-500 cursor-pointer hover:text-primary-600"
             @click="moveUp(scope.$index)"
           />
           <ArrowDownCircleIcon
-            class="inline-block h-[1.2rem] mt-1.5 text-gray-500 cursor-pointer hover:text-primary-600"
+            class="inline-block h-[1.2rem] text-gray-500 cursor-pointer hover:text-primary-600"
             @click="moveDown(scope.$index)"
           />
         </template>
     </el-table-column>
-    <el-table-column fixed="right" width="40">
+    <el-table-column fixed="right">
         <template #header>
-          <div class="text-right">
-            <PlusIcon
-              class="inline-block h-4 -mt-1 text-danger-500 cursor-pointer hover:bg-gray-200 hover:rounded-full"
-              @click="add"
-            />
-          </div>
+          <PlusIcon
+            class="inline-block h-4 -mt-1 text-danger-500 cursor-pointer hover:bg-gray-200 hover:rounded-full"
+            @click="add"
+          />
         </template>
         <template #default="scope">
           <TrashIcon
-            class="inline-block h-[1.1rem] mt-1.5 text-gray-500 cursor-pointer hover:text-danger-600"
+            class="inline-block h-[1.1rem] text-gray-500 cursor-pointer hover:text-danger-600"
             @click="remove(scope.$index)"
           />
         </template>
     </el-table-column>
   </el-table>
+
+  <el-pagination
+      class="mt-5"
+      v-model:current-page="filters.obj.page"
+      v-model:page-size="filters.obj.rows"
+      :default-page-size="15"
+      :page-sizes="[15, 30, 50, 100]"
+      layout="prev, pager, next"
+      :total="data.length"
+      @current-change="handleCurrentChange"
+  />
 </template>
