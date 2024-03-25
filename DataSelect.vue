@@ -45,6 +45,10 @@ watch(() => props.modelValue, (newValue) => {
     dataValue.value = newValue;
 })
 
+watch(() => props.customData, (newValue) => {
+    ajaxData.value = newValue;
+})
+
 </script>
 <template>
   <ElSelect
