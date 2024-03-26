@@ -1,7 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
-import { ElInput } from 'element-plus';
-import { formatNumber, parseNumber } from '@/Services/NumberFormat'
+import { ElDatePicker } from 'element-plus';
 
 const props = defineProps({
   modelValue: { type: String },
@@ -22,13 +21,12 @@ watch([() => props.modelValue], () => {
 </script>
 
 <template>
-  <ElInput
-    v-model="data"
-    :placeholder="placeholder"
-    class="w-full"
-    :disabled="disabled"
-    :formatter="formatNumber"
-    :parser="parseNumber"
-    @input="emitUpdate"
-  />
+    <ElDatePicker
+      v-model="data"
+      value-format="YYYY-MM-DD"
+      :placeholder="placeholder"
+      class="!w-full"
+      :disabled="disabled"
+      @change="emitUpdate"
+    />
 </template>
