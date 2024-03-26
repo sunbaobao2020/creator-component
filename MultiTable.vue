@@ -3,9 +3,11 @@ import { ref, reactive } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import { ArrowUpCircleIcon, ArrowDownCircleIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { PlusIcon } from '@heroicons/vue/24/solid'
-import { ElInput, ElTable, ElTableColumn, ElPagination } from 'element-plus';
+import { ElInput, ElTable, ElTableColumn, ElPagination, ElDatePicker } from 'element-plus';
 import { formatNumber, parseNumber } from '@/Services/NumberFormat'
 import sortArray from 'sort-array'
+import DateInput from './DateInput.vue';
+import NumberInput from './NumberInput.vue';
 
 const props = defineProps({
   data_key: { type: String },
@@ -120,8 +122,12 @@ const handleSelectionChange = (val) => {
             <ElInput v-model="row[column.key]" :placeholder="column.label" class="w-full" :disabled="column.disabled || false" />
           </div>
 
+          <div v-if="column.type==='date'">
+            <DateInput v-model="row[column.key]" :placeholder="column.label" :disabled="column.disabled || false" />
+          </div>
+
           <div v-if="column.type==='number'">
-            <ElInput v-model="row[column.key]" :placeholder="column.label" class="w-full" :disabled="column.disabled || false" :formatter="formatNumber" :parser="parseNumber" />
+            <NumberInput v-model="row[column.key]" :placeholder="column.label" :disabled="column.disabled || false" />
           </div>
         </slot>
         <p class="text-red-500 text-xs italic" v-if="$page.props.errors[`${ data_key }.${ index }.${ column.key }`]">
