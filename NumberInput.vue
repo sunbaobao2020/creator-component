@@ -1,10 +1,9 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { ElInput } from 'element-plus';
-import { formatNumber, parseNumber } from '@/Services/NumberFormat'
 
 const props = defineProps({
-  modelValue: { type: String },
+  modelValue: { type: [String, Number] },
   placeholder: { type: String },
   disabled: { type: Boolean, default: false },
 })
@@ -14,6 +13,14 @@ const data = ref(props.modelValue);
 
 const emitUpdate = (value) => {
   emit('update:modelValue', value);
+};
+
+const formatNumber = (value) => {
+  return value ? parseFloat(value).toLocaleString('en-US') : '0';
+};
+
+const parseNumber = (value) => {
+  return (parseFloat(value.replace(/,/g, '')) || 0).toString();
 };
 
 watch([() => props.modelValue], () => {
