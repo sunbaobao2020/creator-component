@@ -4,7 +4,6 @@ import { usePage } from '@inertiajs/vue3'
 import { ArrowUpCircleIcon, ArrowDownCircleIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { PlusIcon } from '@heroicons/vue/24/solid'
 import { ElInput, ElTable, ElTableColumn, ElPagination, ElDatePicker } from 'element-plus';
-import { formatNumber, parseNumber } from '@/Services/NumberFormat'
 import DateInput from './DateInput.vue';
 import NumberInput from './NumberInput.vue';
 
@@ -67,7 +66,7 @@ const getForSort = (stra, strb, type) => {
   }
 
   if(type === 'number' || (typeof stra === typeof strb && typeof strb === 'number')){
-    return parseNumber(stra) - parseNumber(strb);
+    return parseFloat(stra) - parseFloat(strb);
   }else{
     return stra.localeCompare(strb);
   }
