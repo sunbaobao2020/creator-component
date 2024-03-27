@@ -5,7 +5,6 @@ import { ArrowUpCircleIcon, ArrowDownCircleIcon, TrashIcon } from '@heroicons/vu
 import { PlusIcon } from '@heroicons/vue/24/solid'
 import { ElInput, ElTable, ElTableColumn, ElPagination, ElDatePicker } from 'element-plus';
 import { formatNumber, parseNumber } from '@/Services/NumberFormat'
-import sortArray from 'sort-array'
 import DateInput from './DateInput.vue';
 import NumberInput from './NumberInput.vue';
 
@@ -62,15 +61,27 @@ const moveDown = (index) => {
   }
 }
 
+const getForSort = (stra, strb, type) => {
+  if(typeof stra === 'undefined' || typeof strb === 'undefined'){
+    return 0;
+  }
+
+  if(type === 'number' || (typeof stra === typeof strb && typeof strb === 'number')){
+    return parseNumber(stra) - parseNumber(strb);
+  }else{
+    return stra.localeCompare(strb);
+  }
+}
+
 
 const onSort = (value) => {
-  state.sortBy = value.prop;
-  state.sortOrder = value.order;
+  value.type = props.columns.find(column => column.key === value.prop)?.type;
 
-  sortArray(props.data, {
-    by: value.prop,
-    order: value.order === 'ascending' ? 'asc' : 'desc'
-  })
+  if(value.order === 'descending'){
+    props.data.sort((a,b) => getForSort(a[value.prop], b[value.prop], value.type))
+  }else{
+    props.data.sort((a,b) => getForSort(b[value.prop], a[value.prop], value.type))
+  }
 }
 
 const getRowKey = (row) => {
