@@ -62,6 +62,7 @@ watch(() => props.customData, (newValue) => {
 </script>
 <template>
   <ElSelect
+      filterable
       v-model="dataValue"
       class="w-full"
       @change="value => changeData(value)"
