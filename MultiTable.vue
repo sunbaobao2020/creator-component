@@ -160,6 +160,7 @@ const handleSelectionChange = (val) => {
     <el-table-column fixed="right">
         <template #header>
           <PlusIcon
+            v-if="add_data"
             class="inline-block h-4 -mt-1 text-danger-500 cursor-pointer hover:bg-gray-200 hover:rounded-full"
             @click="add"
           />
