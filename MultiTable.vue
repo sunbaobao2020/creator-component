@@ -47,7 +47,7 @@ const remove = (index) => {
 }
 
 const moveUp = (index) => {
-  index = ((state.page - 1)* state.rows) + index; //當頁總數 - (每頁數量 - 當前索引)
+  index = ((state.page - 1) * state.rows) + index; //當頁總數 - (每頁數量 - 當前索引)
   if (props.data && index > 0) {
     let rows = [props.data[index], props.data[index - 1]];
     props.data?.splice(index - 1, 2, rows[0], rows[1]);
