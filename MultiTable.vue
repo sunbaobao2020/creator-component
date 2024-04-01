@@ -13,6 +13,7 @@ const props = defineProps({
   data: { type: Array, default: [] },
   add_data: { type: Boolean, default: true },
   max_height: { type: Number, default: 500 },
+  disabled: { type: Boolean, default: false },
 })
 
 const state = reactive({
@@ -131,15 +132,15 @@ const handleSelectionChange = (val) => {
       <template #default="{ row }">
         <slot :name="'cell('+column.key+')'" :item="row" :index="index" :column="column">
           <div v-if="column.type==='input'">
-            <ElInput v-model="row[column.key]" :placeholder="column.label" class="w-full" :disabled="column.disabled || false" />
+            <ElInput v-model="row[column.key]" :placeholder="column.label" class="w-full" :disabled="disabled || column.disabled || false" />
           </div>
 
           <div v-if="column.type==='date'">
-            <DateInput v-model="row[column.key]" :placeholder="column.label" :disabled="column.disabled || false" />
+            <DateInput v-model="row[column.key]" :placeholder="column.label" :disabled="disabled || column.disabled || false" />
           </div>
 
           <div v-if="column.type==='number'">
-            <NumberInput v-model="row[column.key]" :placeholder="column.label" :disabled="column.disabled || false" />
+            <NumberInput v-model="row[column.key]" :placeholder="column.label" :disabled="disabled || column.disabled || false" />
           </div>
         </slot>
         <p class="text-red-500 text-xs italic" v-if="$page.props.errors[`${ data_key }.${ index }.${ column.key }`]">
