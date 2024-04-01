@@ -130,7 +130,7 @@ const handleSelectionChange = (val) => {
         </span>
       </template>
       <template #default="{ row }">
-        <slot :name="'cell('+column.key+')'" :item="row" :index="index" :column="column">
+        <slot :name="'cell('+column.key+')'" :item="row" :index="index" :column="column" :disabled="disabled || column.disabled || false">
           <div v-if="column.type==='input'">
             <ElInput v-model="row[column.key]" :placeholder="column.label" class="w-full" :disabled="disabled || column.disabled || false" />
           </div>
@@ -148,7 +148,7 @@ const handleSelectionChange = (val) => {
         </p>
       </template>
     </el-table-column>
-    <el-table-column fixed="right">
+    <el-table-column fixed="right" v-if="!disabled">
         <template #default="scope">
           <ArrowUpCircleIcon
             class="inline-block h-[1.2rem] text-gray-500 cursor-pointer hover:text-primary-600"
@@ -160,7 +160,7 @@ const handleSelectionChange = (val) => {
           />
         </template>
     </el-table-column>
-    <el-table-column fixed="right">
+    <el-table-column fixed="right" v-if="!disabled">
         <template #header>
           <PlusIcon
             v-if="add_data"
