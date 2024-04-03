@@ -13,6 +13,7 @@ const props = defineProps({
     option_label: { type: String, default: 'name'},
     customData: { type: Array },
     route_parameter: { type: Object, default: () => ({  })},
+    disabled: { type: Boolean, default: false },
 })
 
 const page = usePage();
@@ -62,6 +63,7 @@ watch(() => props.customData, (newValue) => {
 </script>
 <template>
   <ElSelect
+        :disabled="disabled"
       filterable
       v-model="dataValue"
       class="w-full"
