@@ -90,7 +90,7 @@ const handleSelectionChange = (val) => {
 const selectedHighlight = ({ row, rowIndex }) => {
     let style = '';
     if (props.selectedHighlight && ids.value.find(item => item.id == row.id)) {
-        style += '!bg-[#ecf5ff] !text-gray-700';
+        style += '!bg-[#ecf5ff] dark:!bg-[transparent]';
     }
 
     return style
