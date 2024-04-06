@@ -87,7 +87,7 @@ const handleSelectionChange = (val) => {
     emit('selectionChange', val);
 }
 
-const selectedHighlight = ({ row, rowIndex }) => {
+const selectedHighlightFunc = ({ row, rowIndex }) => {
     let style = '';
     if (props.selectedHighlight && ids.value.find(item => item.id == row.id)) {
         style += '!bg-[#ecf5ff] dark:!bg-[transparent]';
@@ -154,13 +154,13 @@ defineExpose({
         :default-sort="{ prop: filters.obj.sortBy, order: filters.obj.sortOrder }"
         @sort-change="onSort"
         border
-        highlight-current-row
         show-overflow-tooltip
         height="500"
         :row-key="getRowKey"
-        :row-class-name="selectedHighlight"
+        :row-class-name="selectedHighlightFunc"
         :default-expand-all="false"
         @selection-change="handleSelectionChange"
+        :highlight-current-row="selectedHighlight ? false : true"
     >
             <slot />
     </el-table>
