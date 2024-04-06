@@ -17,6 +17,7 @@ const props = defineProps({
 
 const page = usePage();
 const table_key = `${ page.props.routeNameData }_query`;
+const darkMode = localStorage.getItem('darkMode');
 
 const setData = () => {
     localStorage.setItem(table_key, JSON.stringify(props.filters.obj));
@@ -87,9 +88,12 @@ const handleSelectionChange = (val) => {
 }
 
 const selectedHighlight = ({ row, rowIndex }) => {
+    let style = '';
     if (props.selectedHighlight && ids.value.find(item => item.id == row.id)) {
-        return 'background-color: #ecf5ff';
+        style += '!bg-[#ecf5ff] !text-gray-700';
     }
+
+    return style
 }
 
 const getRowKey = (row) => {
@@ -154,7 +158,7 @@ defineExpose({
         show-overflow-tooltip
         height="500"
         :row-key="getRowKey"
-        :row-style="selectedHighlight"
+        :row-class-name="selectedHighlight"
         :default-expand-all="false"
         @selection-change="handleSelectionChange"
     >
