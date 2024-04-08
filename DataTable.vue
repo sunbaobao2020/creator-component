@@ -13,6 +13,7 @@ const props = defineProps({
     customReset: { type: Boolean, default: false },
     refs: { type: Boolean, default: false },
     selectedHighlight: { type: Boolean, default: false },
+    selectedAbsolute: { type: Boolean, default: false },
 })
 
 const page = usePage();
@@ -87,13 +88,34 @@ const handleSelectionChange = (val) => {
     emit('selectionChange', val);
 }
 
-const selectedHighlightFunc = ({ row, rowIndex }) => {
-    let style = '';
+const selectedHighlightFunc = (row, rowIndex) => {
+    let obj = {
+        class: '',
+        style: '',
+    };
+
     if (props.selectedHighlight && ids.value.find(item => item.id == row.id)) {
-        style += '!bg-[#ecf5ff] dark:!bg-[transparent]';
+        obj.class += '!bg-[#ecf5ff] dark:!bg-[#262727] ';
+
+        if(props.selectedAbsolute){
+            let allIds = ids.value.map(item => item.id); //全部选中的id
+            let pageIndex = props.data.data.filter(item => allIds.includes(item.id)); //當前頁面選中的數據
+            let findIndex = pageIndex.findIndex(item => item.id == row.id); //當前頁面選中的數據索引
+            let offsetHeight = dataTable.value.$el.querySelector('.el-table__row').offsetHeight * findIndex;
+            obj.class += `sticky z-[999] top-[${offsetHeight}px] `;
+            obj.style += `top: ${offsetHeight}px;`;
+        }
     }
 
-    return style
+    return obj
+}
+
+const selectedHighlightClassFunc = ({ row, rowIndex }) => {
+    return selectedHighlightFunc(row, rowIndex).class;
+}
+
+const selectedHighlightStyleFunc = ({ row, rowIndex }) => {
+    return selectedHighlightFunc(row, rowIndex).style;
 }
 
 const getRowKey = (row) => {
@@ -157,7 +179,8 @@ defineExpose({
         show-overflow-tooltip
         height="500"
         :row-key="getRowKey"
-        :row-class-name="selectedHighlightFunc"
+        :row-class-name="selectedHighlightClassFunc"
+        :row-style="selectedHighlightStyleFunc"
         :default-expand-all="false"
         @selection-change="handleSelectionChange"
         :highlight-current-row="selectedHighlight ? false : true"
