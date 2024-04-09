@@ -102,7 +102,7 @@ const selectedHighlightFunc = (row, rowIndex) => {
             let pageIndex = props.data.data.filter(item => allIds.includes(item.id)); //當前頁面選中的數據
             let findIndex = pageIndex.findIndex(item => item.id == row.id); //當前頁面選中的數據索引
             let offsetHeight = dataTable.value.$el.querySelector('.el-table__row').offsetHeight * findIndex;
-            obj.class += `sticky z-[999] top-[${offsetHeight}px] `;
+            obj.class += `sticky z-[2] top-[${offsetHeight}px] `;
             obj.style += `top: ${offsetHeight}px;`;
         }
     }
