@@ -7,7 +7,7 @@ const props = defineProps({
   modelValue: { type: [String, Number] },
   placeholder: { type: String },
   disabled: { type: Boolean, default: false },
-  precision: { type: Number, default: 2 },
+  precision: { type: Number, default: 0 },
   separator: { type: Boolean, default: true },
 })
 
@@ -32,7 +32,7 @@ const emitUpdate = (value) => {
 };
 
 watch([() => props.modelValue], () => {
-  data.value = props.modelValue;
+  data.value = props.modelValue ?? 0;
 })
 </script>
 
