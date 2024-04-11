@@ -6,6 +6,7 @@ const props = defineProps({
   modelValue: { type: String },
   placeholder: { type: String },
   disabled: { type: Boolean, default: false },
+  type: { type: String, default: 'date' },
 })
 const emit = defineEmits(['update:modelValue'])
 
@@ -27,6 +28,7 @@ watch([() => props.modelValue], () => {
       :placeholder="placeholder"
       class="!w-full"
       :disabled="disabled"
+      :type="type"
       @change="emitUpdate"
     />
 </template>
