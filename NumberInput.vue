@@ -7,7 +7,7 @@ const props = defineProps({
   modelValue: { type: [String, Number] },
   placeholder: { type: String },
   disabled: { type: Boolean, default: false },
-  precision: { type: Number, default: 0 },
+  precision: { type: Number, default: 2 },
   separator: { type: Boolean, default: true },
 })
 
