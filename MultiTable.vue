@@ -14,11 +14,13 @@ const props = defineProps({
   add_data: { type: Boolean, default: true },
   max_height: { type: Number, default: 500 },
   disabled: { type: Boolean, default: false },
+  pageSize: { type: Number, default: 5 },
+  pageSizes: { type: Array, default: [5, 10, 15, 30, 100] },
 })
 
 const state = reactive({
   page: 1,
-  rows: 5,
+  rows: props.pageSize,
   total: props.data.length
 })
 
@@ -182,7 +184,7 @@ const handleSelectionChange = (val) => {
       v-model:current-page="state.page"
       v-model:page-size="state.rows"
       :default-page-size="state.rows"
-      :page-sizes="[5, 10, 15]"
+      :page-sizes="pageSizes"
       layout="sizes, prev, pager, next"
       :total="data.length"
   />
