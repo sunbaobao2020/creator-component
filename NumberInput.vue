@@ -21,24 +21,25 @@ const options = {
   precision: props.precision,
 }
 
-const { inputRef } = useCurrencyInput(options, false)
+const { inputRef, setValue, setOptions } = useCurrencyInput(options, false)
 
 const emit = defineEmits(['update:modelValue'])
-
-const data = ref(props.modelValue);
 
 const emitUpdate = (value) => {
   emit('update:modelValue', value);
 };
 
 watch([() => props.modelValue], () => {
-  data.value = props.modelValue ?? 0;
+  setValue(props.modelValue);
+})
+
+watch([() => options], () => {
+  setOptions(options);
 })
 </script>
 
 <template>
   <ElInput
-    v-model="data"
     :placeholder="placeholder"
     class="w-full"
     :disabled="disabled"
