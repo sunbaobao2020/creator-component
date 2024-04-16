@@ -1,2 +1,1 @@
-# vue-compone
-45564
+# vue-componet
