@@ -33,9 +33,9 @@ watch([() => props.modelValue], () => {
   setValue(props.modelValue);
 })
 
-watch([() => options], () => {
-  setOptions(options);
-})
+// watch([() => options], () => {
+//   setOptions(options);
+// })
 </script>
 
 <template>
