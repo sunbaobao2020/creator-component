@@ -15,7 +15,7 @@ const props = defineProps({
   max_height: { type: Number, default: 500 },
   disabled: { type: Boolean, default: false },
   pageSize: { type: Number, default: 5 },
-  pageSizes: { type: Array, default: [5, 10, 15, 30, 100] },
+  pageSizes: { type: Array, default: [5, 10, 15, 30] },
 })
 
 const state = reactive({
