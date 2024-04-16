@@ -11,6 +11,7 @@ const props = defineProps({
   separator: { type: Boolean, default: true },
 })
 
+const data = ref(props.modelValue);
 
 const options = {
   currency: "TWD",
@@ -40,6 +41,7 @@ watch([() => props.modelValue], () => {
 
 <template>
   <ElInput
+    v-model="data"
     :placeholder="placeholder"
     class="w-full"
     :disabled="disabled"
