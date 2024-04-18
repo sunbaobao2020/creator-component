@@ -14,6 +14,7 @@ const props = defineProps({
     customData: { type: Array },
     route_parameter: { type: Object, default: () => ({  })},
     disabled: { type: Boolean, default: false },
+    remote: { type: Boolean, default: false },
 })
 
 const page = usePage();
@@ -29,9 +30,11 @@ const loadAjaxData = (query) => {
     if(props.customData){
         ajaxData.value = props.customData;
     }else{
-        axios.get(route(`${ prefix }.${ props.route_name }.options`, { search: query, ...props.route_parameter }), ).then(({ data }) => {
-            ajaxData.value = data;
-        })
+        if(route().has(props.route_name)){
+            axios.get(route(props.route_name, { search: query, ...props.route_parameter }), ).then(({ data }) => {
+                ajaxData.value = data;
+            })
+        }
     }
 }
 
@@ -70,6 +73,8 @@ watch(() => props.customData, (newValue) => {
       @change="value => changeData(value)"
       clearable
       :multiple="multiple"
+      remote
+      :remote-method="loadAjaxData"
   >
     <slot name="option" v-bind="props" :data="ajaxData" >
       <ElOption
