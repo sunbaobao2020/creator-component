@@ -3,14 +3,16 @@ import { ref, watch } from 'vue';
 import { ElDatePicker } from 'element-plus';
 
 const props = defineProps({
-  modelValue: { type: String },
+  modelValue: { type: [String, Array] },
   placeholder: { type: String },
   disabled: { type: Boolean, default: false },
   type: { type: String, default: 'date' },
   startPlaceholder: { type: String, default: '' },
   endPlaceholder: { type: String, default: '' },
   rangeSeparator: { type: String, default: 'To' },
+  disabledDate: { type: Function, default: () => false }
 })
+
 const emit = defineEmits(['update:modelValue'])
 
 const data = ref(props.modelValue);
@@ -36,5 +38,6 @@ watch([() => props.modelValue], () => {
       :range-separator="rangeSeparator"
       :start-placeholder="startPlaceholder"
       :end-placeholder="endPlaceholder"
+      :disabled-date="disabledDate"
     />
 </template>
