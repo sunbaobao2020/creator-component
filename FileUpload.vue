@@ -17,7 +17,6 @@ const upload = ref(null)
 const fileList = props.multiple ? props.modelValue?.map(item => ({ id: item.id, name: item.name, url: item.original_url })) : [{ url: props.modelValue, name: props.modelValue }];
 
 const fileData = ref(props.multiple ? null : { url: props.modelValue, name: props.modelValue })
-console.log(fileData);
 
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
