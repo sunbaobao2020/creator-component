@@ -14,6 +14,7 @@ const props = defineProps({
     refs: { type: Boolean, default: false },
     selectedHighlight: { type: Boolean, default: false },
     selectedAbsolute: { type: Boolean, default: false },
+    manualSearch: { type: Boolean, default: false },
 })
 
 const page = usePage();
@@ -56,11 +57,18 @@ const ids = ref([]);
 
 const debounceTimeouts = {};
 const onKeyWord = () => {
+    if(props.manualSearch){
+        return;
+    }
     clearTimeout(debounceTimeouts['keyWord']);
     debounceTimeouts['keyWord'] = setTimeout(() => {
-        props.filters.obj.page = 1;
-        onSearch();
+        searchData();
     }, 350);
+}
+
+const searchData = () => {
+    props.filters.obj.page = 1;
+    onSearch();
 }
 
 const onSearch = () => {
@@ -141,7 +149,7 @@ defineExpose({
         </el-button>
         <el-input ref="search" v-model="props.filters.obj.search" size="large" @input="onKeyWord" placeholder="search">
             <template #prepend>
-                <el-button :icon="Search" />
+                <el-button :icon="Search" @click="searchData" />
             </template>
         </el-input>
     </div>
