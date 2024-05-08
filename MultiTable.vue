@@ -14,8 +14,8 @@ const props = defineProps({
   add_data: { type: Boolean, default: true },
   max_height: { type: Number, default: 500 },
   disabled: { type: Boolean, default: false },
-  pageSize: { type: Number, default: 5 },
-  pageSizes: { type: Array, default: [5, 10, 15, 30] },
+  pageSize: { type: Number, default: 15 },
+  pageSizes: { type: Array, default: [15, 30, 50, 100] },
 })
 
 const state = reactive({
@@ -133,6 +133,7 @@ const handleSelectionChange = (val) => {
       </template>
       <template #default="{ row }">
         <slot :name="'cell('+column.key+')'" :item="row" :index="index" :column="column" :disabled="disabled || column.disabled || false">
+            <!-- {{ row }} -->
           <div v-if="column.type==='input'">
             <ElInput v-model="row[column.key]" :placeholder="column.label" class="w-full" :disabled="disabled || column.disabled || false" />
           </div>
