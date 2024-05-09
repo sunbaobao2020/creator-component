@@ -74,12 +74,12 @@ const handlePictureCardPreview = (uploadFile) => {
             :auto-upload="autoUpload"
         >
             <template v-if="listType == 'picture-card'">
-                <img v-if="fileData.url" :src="fileData.url" class="avatar" />
+                <img v-if="fileData" :src="fileData.url" class="avatar" />
                 <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
             </template>
 
             <template v-if="listType == 'text'">
-                <div v-if="fileData.name" class="avatar"><div>{{ fileData.name }}</div></div>
+                <div v-if="fileData" class="avatar"><div>{{ fileData.name }}</div></div>
                 <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
             </template>
         </el-upload>

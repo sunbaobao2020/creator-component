@@ -14,6 +14,8 @@ const props = defineProps({
     refs: { type: Boolean, default: false },
     selectedHighlight: { type: Boolean, default: false },
     selectedAbsolute: { type: Boolean, default: false },
+    manualSearch: { type: Boolean, default: false },
+    autoClear: { type: Boolean, default: false },
 })
 
 const page = usePage();
@@ -56,16 +58,26 @@ const ids = ref([]);
 
 const debounceTimeouts = {};
 const onKeyWord = () => {
+    if(props.manualSearch){
+        return;
+    }
     clearTimeout(debounceTimeouts['keyWord']);
     debounceTimeouts['keyWord'] = setTimeout(() => {
-        props.filters.obj.page = 1;
-        onSearch();
+        searchData();
     }, 350);
+}
+
+const searchData = () => {
+    props.filters.obj.page = 1;
+    onSearch();
 }
 
 const onSearch = () => {
     setData();
     emit('search', setting);
+    if(props.autoClear){
+        props.filters.obj.search = '';
+    }
 }
 
 const onReset = () => {
@@ -139,9 +151,9 @@ defineExpose({
         <el-button class="mr-4" size="large" @click="onReset" :icon="Refresh">
             {{ $page.props.langs.reset }}
         </el-button>
-        <el-input ref="search" v-model="props.filters.obj.search" size="large" @input="onKeyWord" placeholder="search">
+        <el-input ref="search" clearable v-model="props.filters.obj.search" size="large" @input="onKeyWord" v-on:keyup.enter="searchData" placeholder="search">
             <template #prepend>
-                <el-button :icon="Search" />
+                <el-button :icon="Search" @click="searchData" />
             </template>
         </el-input>
     </div>
